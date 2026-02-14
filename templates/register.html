@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-wrapper" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 85vh;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-item" style="width: 100%; max-width: 450px; margin-bottom: 20px;">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="auth-card" style="background: rgba(10, 26, 18, 0.7); border: 1px solid rgba(224, 134, 31, 0.3); padding: 50px; width: 100%; max-width: 450px; backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+        <h2 style="font-family: 'Nanum Myeongjo', serif; color: #fff; letter-spacing: 3px; margin-bottom: 10px; text-align: center;">비밀 유지 서약서</h2>
+        <p style="color: #666; font-size: 0.85rem; text-align: center; margin-bottom: 40px;">비밀 유지 서약서를 작성한 입주민만이<br>게시판에 쪽지 남기기가 가능합니다.</p>
+        
+        <form method="POST">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 1px;">IDENTITY NAME</label>
+                <input type="text" name="username" placeholder="본인의 이름을 입력하세요" required 
+                       style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 1px;">SECRET PASSWORD</label>
+                <input type="password" name="password" placeholder="••••••••" required 
+                       style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 1px;">CONFIRM PASSWORD</label>
+                <input type="password" name="confirm_password" placeholder="비밀번호를 다시 한번 입력하세요" required 
+                       style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <div style="margin-bottom: 35px;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 1px;">INVITATION CODE</label>
+                <input type="text" name="invite_code" placeholder="발급받은 고유번호 네 자리를 입력하세요" required 
+                       style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <button type="submit" class="auth-btn" style="width: 100%; padding: 15px; background: #fff; color: #000; font-weight: bold; border: none; cursor: pointer; transition: 0.3s;">등록하기</button>
+        </form>
+        
+        <div style="margin-top: 30px; text-align: center; font-size: 0.8rem;">
+            <span style="color: #666;">이미 서약서를 작성하였나요?</span>
+            <a href="{{ url_for('login') }}" style="color: #e0861f; text-decoration: none; margin-left: 10px; font-weight: bold;">접속하기</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .status-active { color: #55ff55 !important; font-weight: bold; }
+    .status-blocked { color: #ff5555 !important; font-weight: bold; }
+    .status-used { color: #666 !important; font-style: italic; }
+    .status-waiting { color: #e0861f !important; font-style: italic; }
+    .admin-wrapper { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+    .admin-section { background: rgba(10, 26, 18, 0.65); border: 1px solid rgba(224, 134, 31, 0.25); padding: 30px; margin-bottom: 50px; backdrop-filter: blur(10px); }
+    .admin-table { width: 100%; border-collapse: collapse; color: #ccc; font-size: 0.9rem; }
+    .admin-table th { padding: 12px; border-bottom: 2px solid #e0861f; color: #e0861f; text-align: left; text-transform: uppercase; letter-spacing: 1px; }
+    .admin-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .code-badge { background: rgba(224, 134, 31, 0.1); color: #e0861f; padding: 2px 8px; border: 1px solid rgba(224, 134, 31, 0.3); font-family: monospace; }
+</style>
+
+<div class="admin-wrapper">
+    <div class="admin-header" style="margin-bottom: 50px;">
+        <h1 style="font-family: 'Nanum Myeongjo', serif; color: #fff; letter-spacing: 2px;">ADMIN DASHBOARD</h1>
+        <p style="color: #666; font-size: 0.9rem;">드벨로 아파트 입주민 목록</p>
+    </div>
+
+    <div class="admin-section">
+        <h3 style="color: #e0861f; font-size: 1.1rem; margin-bottom: 25px;">INVITATION ISSUANCE</h3>
+        <form action="{{ url_for('add_invite') }}" method="POST" style="display: flex; gap: 20px; align-items: flex-end;">
+            <div style="flex: 1;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px;">대상 이름 (Identity)</label>
+                <input type="text" name="target_name" placeholder="예: 백정현" required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <div style="flex: 1;">
+                <label style="display: block; color: #e0861f; font-size: 0.75rem; margin-bottom: 8px;">고유번호 (Secret Code)</label>
+                <input type="text" name="new_code" placeholder="예: 9999" required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none;">
+            </div>
+            <button type="submit" style="background: #fff; color: #000; padding: 10px 30px; font-weight: bold; border: none; cursor: pointer;">발급하기</button>
+        </form>
+    </div>
+
+    <div class="admin-section">
+        <h3 style="color: #e0861f; font-size: 1.1rem; margin-bottom: 20px;">INVITATION LIST</h3>
+        <table class="admin-table">
+            <thead>
+                <tr><th>Target Identity</th><th>Secret Code</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                {% for invite in invites %}
+                <tr>
+                    <td style="color: #fff; font-weight: bold;">{{ invite.target_username }}</td>
+                    <td><span class="code-badge">{{ invite.code }}</span></td>
+                    <td class="{{ 'status-used' if invite.is_used else 'status-waiting' }}">{{ '가입 완료' if invite.is_used else '가입 대기 중' }}</td>
+                    <td><a href="{{ url_for('delete_invite', invite_id=invite.id) }}" onclick="return confirm('폐기하시겠습니까?');" style="color: #ff5555; text-decoration: none; border: 1px solid #ff5555; padding: 2px 8px;">폐기</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-section">
+        <h3 style="color: #e0861f; font-size: 1.1rem; margin-bottom: 20px;">RECORDERS LIST</h3>
+        <table class="admin-table">
+            <thead>
+                <tr><th>ID</th><th>Username</th><th>Used Code</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% set user_invite = invites | selectattr("target_username", "equalto", user.username) | first %}
+                        <span class="code-badge">{{ user_invite.code if user_invite else '-' }}</span>
+                    </td>
+                    <td class="{{ 'status-blocked' if user.is_blocked else 'status-active' }}">{{ 'Blocked' if user.is_blocked else 'Active' }}</td>
+                    <td>
+                        {% if user.username != '백정현' %}
+                        <a href="{{ url_for('block_user', user_id=user.id) }}" style="color: #e0861f; text-decoration: none; border: 1px solid #e0861f; padding: 2px 8px;">{{ '해제' if user.is_blocked else '차단' }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+/* --- 1. 배경 및 기본 레이아웃 --- */
+.fixed-background {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                url('/static/background.png') no-repeat center center;
+    background-size: cover;
+}
+body { margin: 0; color: #f0f0f0; font-family: 'Nanum Myeongjo', serif; background-color: #000; }
+
+/* --- 2. 네비게이션 및 상단 바 (38px 고정) --- */
+nav { background-color: rgba(0, 0, 0, 0.95); padding: 10px 0; border-bottom: 1px solid rgba(224, 134, 31, 0.2); position: sticky; top: 0; z-index: 2000; }
+.nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+.logo img { height: 38px !important; width: auto !important; }
+.nav-links { display: flex; align-items: center; gap: 20px; }
+.user-info.admin-link { color: #e0861f !important; font-weight: bold; text-decoration: none; }
+.nav-item { color: #ffffff !important; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+.nav-item:hover { color: #e0861f !important; }
+
+/* --- 3. [복구] 에디터 서체 13종 미리보기 및 스크롤 --- */
+.ql-snow .ql-picker-options { background-color: #0a1a12 !important; border: 1px solid #e0861f !important; max-height: 200px !important; overflow-y: auto !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Nanum Gothic"]::before { content: '나눔고딕' !important; font-family: 'Nanum Gothic' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Nanum Myeongjo"]::before { content: '나눔명조' !important; font-family: 'Nanum Myeongjo' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Gothic A1"]::before { content: '고딕 A1' !important; font-family: 'Gothic A1' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Hahmlet"]::before { content: '함렛' !important; font-family: 'Hahmlet' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Song Myung"]::before { content: '송명' !important; font-family: 'Song Myung' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Hurricane"]::before { content: 'Hurricane' !important; font-family: 'Hurricane' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Meddon"]::before { content: 'Meddon' !important; font-family: 'Meddon' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Estonia"]::before { content: 'Estonia' !important; font-family: 'Estonia' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Rock Salt"]::before { content: 'Rock Salt' !important; font-family: 'Rock Salt' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Playwrite IN Guides"]::before { content: 'Playwrite IN' !important; font-family: 'Playwrite IN Guides' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Coral Pixels"]::before { content: 'Coral Pixels' !important; font-family: 'Coral Pixels' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Ma Shan Zheng"]::before { content: '馬山正' !important; font-family: 'Ma Shan Zheng' !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Zhi Mang Xing"]::before { content: '芝芒星' !important; font-family: 'Zhi Mang Xing' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-item::before { content: attr(data-value) !important; }
+.ql-snow .ql-picker.ql-font .ql-picker-label::before { content: '서체 선택' !important; }
+.ql-snow .ql-picker.ql-size .ql-picker-label::before { content: '크기' !important; }
+
+/* --- 4. [신규] 대시보드 스타일 게시글 카드 --- */
+.rumor-card {
+    background: rgba(10, 26, 18, 0.65); /* 반투명 배경 */
+    border: 1px solid rgba(224, 134, 31, 0.25); /* 주황색 테두리 */
+    padding: 20px 30px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(8px); /* 글래스모피즘 효과 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.ql-editor { padding: 0 !important; line-height: 1.7 !important; font-size: 1.05rem !important; color: #efefef; }
+
+/* 말소된 카드에 적용할 스타일 클래스 */
+.rumor-card.erased {
+    opacity: 0.5 !important;
+    filter: grayscale(1); /* 시각적 차별화를 위해 회색조 추가 */
+}
