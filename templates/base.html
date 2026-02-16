@@ -12,54 +12,32 @@
             background-size: cover;
         }
         body { margin: 0; color: #f0f0f0; font-family: 'Nanum Myeongjo', serif; background-color: #000; }
-        nav { background: rgba(0, 0, 0, 0.9); border-bottom: 1px solid rgba(224, 134, 31, 0.2); padding: 12px 0; position: sticky; top: 0; z-index: 1000; }
+        nav { background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid rgba(224, 134, 31, 0.2); padding: 12px 0; position: sticky; top: 0; z-index: 2000; }
         .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .logo img { height: 38px; }
-        .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
-        .nav-links a:hover { color: #e0861f; }
+        .logo img { height: 38px; display: block; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-item { color: #fff !important; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .nav-item:hover { color: #e0861f !important; }
+        .user-info.admin-link { color: #e0861f !important; font-weight: bold; text-decoration: none; font-size: 0.9rem; }
         .flash-item { background: rgba(224, 134, 31, 0.15); border: 1px solid rgba(224, 134, 31, 0.5); color: #e0861f; padding: 15px; margin: 20px auto; max-width: 450px; text-align: center; backdrop-filter: blur(5px); }
-
-        /* [해결] Quill 13종 서체 미리보기 CSS 매핑 */
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Nanum Gothic"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Nanum Gothic"]::before { content: '나눔고딕'; font-family: 'Nanum Gothic'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Nanum Myeongjo"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Nanum Myeongjo"]::before { content: '나눔명조'; font-family: 'Nanum Myeongjo'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Gothic A1"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Gothic A1"]::before { content: '고딕 A1'; font-family: 'Gothic A1'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Hahmlet"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Hahmlet"]::before { content: '함렛'; font-family: 'Hahmlet'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Song Myung"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Song Myung"]::before { content: '송명'; font-family: 'Song Myung'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Hurricane"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Hurricane"]::before { content: 'Hurricane'; font-family: 'Hurricane'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Meddon"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Meddon"]::before { content: 'Meddon'; font-family: 'Meddon'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Estonia"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Estonia"]::before { content: 'Estonia'; font-family: 'Estonia'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Rock Salt"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Rock Salt"]::before { content: 'Rock Salt'; font-family: 'Rock Salt'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Playwrite IN Guides"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Playwrite IN Guides"]::before { content: 'Playwrite IN'; font-family: 'Playwrite IN Guides'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Coral Pixels"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Coral Pixels"]::before { content: 'Coral Pixels'; font-family: 'Courier New'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Ma Shan Zheng"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Ma Shan Zheng"]::before { content: '馬山正'; font-family: 'Ma Shan Zheng'; }
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="Zhi Mang Xing"]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="Zhi Mang Xing"]::before { content: '芝芒星'; font-family: 'Zhi Mang Xing'; }
-
-        /* [해결] image_4b9b05의 폰트 크기 미리보기 매핑 */
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="9pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="9pt"]::before { content: '9pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10pt"]::before { content: '10pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="12pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12pt"]::before { content: '12pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="14pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14pt"]::before { content: '14pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="16pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16pt"]::before { content: '16pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="20pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20pt"]::before { content: '20pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="24pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24pt"]::before { content: '24pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="32pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="32pt"]::before { content: '32pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="40pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="40pt"]::before { content: '40pt'; }
-        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="48pt"]::before, .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="48pt"]::before { content: '48pt'; }
     </style>
 </head>
 <body>
     <div class="fixed-background"></div>
     <nav>
         <div class="nav-container">
-            <div class="logo"><a href="/"><img src="/static/logo.png" alt="Logo"></a></div>
+            <div class="logo" style="display: flex; align-items: center; gap: 20px;">
+                <a href="/"><img src="/static/logo.png" alt="Logo"></a>
+                <a href="{{ url_for('d_velo') }}" class="nav-item" style="font-family: 'Hahmlet', serif; letter-spacing: 1px; font-weight: bold;">D'VELO</a>
+            </div>
             <div class="nav-links">
                 {% if current_user.is_authenticated %}
-                    <span style="color: #e0861f; font-size: 0.8rem;">{{ current_user.username }}</span>
-                    {% if current_user.is_admin %}<a href="{{ url_for('admin_dashboard') }}">ADMIN</a>{% endif %}
-                    <a href="{{ url_for('logout') }}">LOGOUT</a>
+                    <span style="color: #e0861f; font-size: 0.8rem; margin-right: 10px;">{{ current_user.username }}</span>
+                    {% if current_user.is_admin %}<a href="{{ url_for('admin_dashboard') }}" class="user-info admin-link">ADMIN</a>{% endif %}
+                    <a href="{{ url_for('logout') }}" class="nav-item">LOGOUT</a>
                 {% else %}
-                    <a href="{{ url_for('login') }}">LOGIN</a>
-                    <a href="{{ url_for('register') }}">REGISTER</a>
+                    <a href="{{ url_for('login') }}" class="nav-item">LOGIN</a>
+                    <a href="{{ url_for('register') }}" class="nav-item">REGISTER</a>
                 {% endif %}
             </div>
         </div>

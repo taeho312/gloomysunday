@@ -16,11 +16,17 @@
                 <input type="password" name="password" placeholder="••••••••" required 
                        style="width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 0; outline: none; font-size: 0.9rem;">
             </div>
+
+            <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="remember" id="remember" style="accent-color: #e0861f; cursor: pointer;">
+                <label for="remember" style="color: #666; font-size: 0.8rem; cursor: pointer;">자동 로그인</label>
+            </div>
+
             <button type="submit" class="auth-btn" style="width: 100%; padding: 15px; background: #fff; color: #000; font-weight: bold; border: none; cursor: pointer; transition: 0.3s;">접속하기</button>
         </form>
         
         <div style="margin-top: 30px; text-align: center; font-size: 0.8rem;">
-            <span style="color: #666;">드벨로의 입주민이 아니신가요?</span>
+            <span style="color: #666;"아직 드벨로의 입주민이 아니신가요?</span>
             <a href="{{ url_for('register') }}" style="color: #e0861f; text-decoration: none; margin-left: 10px; font-weight: bold;">가입하기</a>
         </div>
     </div>

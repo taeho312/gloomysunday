@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 1000px; margin: 60px auto 100px auto; padding: 0 20px;">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('d_velo') }}" style="color: #e0861f; text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">← BACK TO SITE PLAN</a>
+    </div>
+    
+    <div class="rumor-card" style="background: rgba(10, 26, 18, 0.8); border: 1px solid rgba(224, 134, 31, 0.4); padding: 50px; backdrop-filter: blur(12px);">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="color: #e0861f; font-family: 'Hahmlet', serif; letter-spacing: 4px; font-size: 2rem;">COMMUNITY LOUNGE</h2>
+            <p style="color: #666; font-size: 0.85rem; margin-top: 10px;">PREMIUM AMENITY & WELLNESS CENTER</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px;">
+            <div style="background: #050505; border: 1px solid #333; height: 400px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 30px 30px;"></div>
+                <span style="color: #444; font-family: 'Gothic A1', sans-serif; letter-spacing: 2px; font-weight: bold; z-index: 1;">2D BLUEPRINT DATA</span>
+            </div>
+            
+            <div style="padding: 20px; border-left: 1px solid rgba(224, 134, 31, 0.1);">
+                <h3 style="color: #e0861f; font-family: 'Nanum Myeongjo', serif; margin-bottom: 25px;">FACILITIES</h3>
+                <ul style="list-style: none; padding: 0; color: #efefef; line-height: 2.8; font-size: 0.95rem;">
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05);">● Central Cafeteria</li>
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05);">● Wellness Fitness Center</li>
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05);">● Private Library</li>
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05);">● Screen Golf Range</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

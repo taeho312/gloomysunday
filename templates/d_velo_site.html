@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 1100px; margin: 60px auto 100px auto; padding: 0 20px;">
+    <div class="rumor-card" style="padding: 60px 20px; text-align: center; background: rgba(10, 26, 18, 0.75); border: 1px solid rgba(224, 134, 31, 0.3); backdrop-filter: blur(12px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+        
+        <div style="margin-bottom: 50px;">
+            <h2 style="color: #e0861f; font-family: 'Hahmlet', serif; letter-spacing: 5px; font-size: 2.2rem; margin-bottom: 10px;">D'VELO ARCHIVE</h2>
+            <div style="width: 60px; height: 2px; background: #e0861f; margin: 0 auto 20px auto;"></div>
+            <p style="color: #888; font-size: 0.9rem; font-family: 'Nanum Myeongjo', serif;">심미적 조형과 기능적 설계의 완벽한 조화, 단지 조감도 기록</p>
+        </div>
+
+        <div class="site-map-wrapper">
+            <div class="site-map">
+                <div class="grid-overlay"></div>
+
+                <div class="road road-v"></div>
+                <div class="road road-h"></div>
+                
+                <a href="{{ url_for('lounge') }}" class="center-square">
+                    <span class="square-label">COMMUNITY<br>LOUNGE</span>
+                </a>
+
+                <div class="building-grid">
+                    <a href="{{ url_for('b101') }}" class="apt-block b101"><span class="unit-no">101</span></a>
+                    <a href="{{ url_for('b102') }}" class="apt-block b102"><span class="unit-no">102</span></a>
+                    <a href="{{ url_for('b301') }}" class="apt-block b301"><span class="unit-no">301</span></a>
+                    <a href="{{ url_for('b302') }}" class="apt-block b302"><span class="unit-no">302</span></a>
+
+                    <a href="{{ url_for('b201') }}" class="apt-block b201"><span class="unit-no">201</span></a>
+                    <a href="{{ url_for('b202') }}" class="apt-block b202"><span class="unit-no">202</span></a>
+                    <a href="{{ url_for('b401') }}" class="apt-block b401"><span class="unit-no">401</span></a>
+                    <a href="{{ url_for('b402') }}" class="apt-block b402"><span class="unit-no">402</span></a>
+                </div>
+            </div>
+        </div>
+
+        <p style="color: #555; margin-top: 50px; font-size: 0.8rem; letter-spacing: 1px; font-family: 'Gothic A1', sans-serif;">CLICK UNIT OR LOUNGE TO VIEW ARCHITECTURAL DETAILS</p>
+    </div>
+</div>
+
+<style>
+    /* 전체 맵 컨테이너 및 배경 설정 */
+    .site-map-wrapper { padding: 20px; background: #000; border: 1px solid rgba(224, 134, 31, 0.1); display: inline-block; width: 100%; max-width: 900px; box-sizing: border-box; }
+    .site-map { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #050505; border: 1px solid #222; overflow: hidden; }
+    .grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: 0; }
+    
+    /* 도로 및 광장 디자인 */
+    .road { position: absolute; background: #1a1a1a; z-index: 1; box-shadow: inset 0 0 10px #000; }
+    .road-v { width: 40px; height: 100%; left: 50%; transform: translateX(-50%); border-left: 1px dashed #333; border-right: 1px dashed #333; }
+    .road-h { width: 100%; height: 30px; top: 50%; transform: translateY(-50%); border-top: 1px dashed #333; border-bottom: 1px dashed #333; }
+
+    /* 중앙 커뮤니티 라운지 */
+    .center-square {
+        position: absolute; width: 100px; height: 80px; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: #000; border: 2px solid #e0861f; z-index: 15; display: flex; align-items: center; justify-content: center;
+        text-decoration: none; transition: all 0.4s ease; box-shadow: 0 0 20px rgba(224, 134, 31, 0.2);
+    }
+    .center-square:hover { background: rgba(224, 134, 31, 0.1); box-shadow: 0 0 30px rgba(224, 134, 31, 0.5); transform: translate(-50%, -50%) scale(1.05); }
+    .square-label { color: #e0861f; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; text-align: center; line-height: 1.4; }
+
+    /* 주거 동 유닛 스타일 */
+    .apt-block {
+        position: absolute; width: 14%; height: 34%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none; z-index: 10;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); backdrop-filter: blur(5px);
+    }
+    .unit-no { font-family: 'Gothic A1', sans-serif; font-size: 1.2rem; font-weight: 300; letter-spacing: 1px; opacity: 0.7; }
+    .apt-block:hover { background: rgba(224, 134, 31, 0.15); border: 1px solid #e0861f; transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 30px rgba(224, 134, 31, 0.3); }
+    .apt-block:hover .unit-no { opacity: 1; color: #e0861f; font-weight: bold; }
+
+    /* 각 건물 위치값 */
+    .b101 { top: 8%; left: 18%; } .b102 { top: 8%; left: 33%; }
+    .b301 { top: 8%; left: 53%; } .b302 { top: 8%; left: 68%; }
+    .b201 { bottom: 8%; left: 18%; } .b202 { bottom: 8%; left: 33%; }
+    .b401 { bottom: 8%; left: 53%; } .b402 { bottom: 8%; left: 68%; }
+
+    @media (max-width: 768px) {
+        .unit-no { font-size: 0.8rem; }
+        .center-square { width: 70px; height: 55px; }
+        .square-label { font-size: 0.5rem; }
+    }
+</style>
+{% endblock %}

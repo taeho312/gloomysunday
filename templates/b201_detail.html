@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 1000px; margin: 60px auto 100px auto; padding: 0 20px;">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('d_velo') }}" style="color: #e0861f; text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">← 돌아가기</a>
+    </div>
+    
+    <div class="rumor-card" style="background: rgba(10, 26, 18, 0.8); border: 1px solid rgba(224, 134, 31, 0.4); padding: 50px; backdrop-filter: blur(12px);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(224, 134, 31, 0.2); padding-bottom: 20px; margin-bottom: 40px;">
+            <div>
+                <h2 style="color: #e0861f; font-family: 'Hahmlet', serif; font-size: 2.2rem; margin: 0;">D'VELO 201</h2>
+                <p style="color: #666; font-family: 'Hahmlet', serif; font-size: 0.85rem; margin-top: 5px;">호수를 클릭하면 입주민 정보를 확인할 수 있습니다.</p>
+            </div>
+            <div style="text-align: right; color: #efefef; font-family: 'Gothic A1', sans-serif; font-size: 0.9rem;">
+                대한민국 서울특별시 서초구 문하동 183-8
+            </div>
+        </div>
+
+        <div class="matrix-container">
+            <table class="unit-table">
+                <tbody id="unitTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="unitModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle" style="color: #e0861f; margin: 0; font-family: 'Hahmlet', serif;"></h3>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="modalGallery" class="unit-gallery">
+            </div>
+            
+            <div class="unit-specs">
+                <p id="specNo"></p>
+                <p id="specResident"></p>
+                <p id="specFeature"></p>
+                <p id="specStatus" style="color: #e0861f; font-weight: bold;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 기존 단지 배치도 스타일 유지 */
+    .matrix-container { background: #050505; border: 1px solid #333; padding: 40px; position: relative; overflow: hidden; }
+    .unit-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 10px; position: relative; z-index: 1; }
+    .unit-cell { background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05); color: #333; padding: 15px; text-align: center; font-family: 'Gothic A1', sans-serif; cursor: default; transition: 0.3s; }
+    .unit-cell.active { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; cursor: pointer; }
+    .unit-cell.active:hover { background: rgba(224, 134, 31, 0.15); border-color: #e0861f; color: #e0861f; transform: translateY(-3px); }
+    .penthouse.active { background: rgba(224, 134, 31, 0.05); border: 1px solid rgba(224, 134, 31, 0.5); color: #e0861f; }
+
+    /* 갤러리: 한 줄(1열) 가로 배치 고정 */
+    .unit-gallery {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+        margin-bottom: 25px;
+        background: #000;
+        border: 1px solid #222;
+        padding: 10px;
+        height: 250px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .unit-gallery img {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid rgba(224, 134, 31, 0.2);
+        transition: 0.3s;
+        cursor: zoom-in;
+    }
+    .unit-gallery img:hover { border-color: #e0861f; transform: scale(1.02); z-index: 2; }
+    .unit-gallery:empty::before { content: 'NO ARCHIVE IMAGE'; color: #444; font-weight: bold; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+    /* 모달 레이아웃 수정: 상단 고정 및 내부 스크롤 */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(10px); z-index: 3000; align-items: center; justify-content: center; }
+    
+    .modal-content { 
+        width: 95%; 
+        max-width: 700px; 
+        max-height: 85vh; /* 화면 높이의 85%로 제한 */
+        background: rgba(10, 26, 18, 0.98); 
+        border: 1px solid rgba(224, 134, 31, 0.6); 
+        display: flex;
+        flex-direction: column; /* 헤더와 본문을 세로로 배치 */
+        padding: 0; /* 내부 여백은 헤더와 본문에서 따로 처리 */
+        font-family: 'Nanum Myeongjo', serif !important;
+        overflow: hidden;
+    }
+
+    .modal-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        border-bottom: 1px solid rgba(224, 134, 31, 0.2); 
+        padding: 25px 40px; /* 헤더 여백 고정 */
+        background: rgba(10, 26, 18, 1);
+        z-index: 10;
+    }
+
+    .modal-body {
+        padding: 20px 40px 40px 40px;
+        overflow-y: auto; /* 내용이 넘칠 때 본문만 스크롤 */
+        flex: 1;
+    }
+
+    .close-btn { color: #888; font-size: 35px; cursor: pointer; line-height: 1; }
+    .close-btn:hover { color: #e0861f; }
+
+    .unit-specs { color: #efefef; font-size: 0.95rem; line-height: 2.2; font-family: 'Nanum Myeongjo', serif !important; }
+    .unit-specs p { margin: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+    .unit-specs b { color: #fff; font-weight: 700; }
+
+    /* 스크롤바 디자인 */
+    .modal-body::-webkit-scrollbar { width: 6px; }
+    .modal-body::-webkit-scrollbar-track { background: #050505; }
+    .modal-body::-webkit-scrollbar-thumb { background-color: #e0861f; border-radius: 10px; }
+    .modal-body { scrollbar-width: thin; scrollbar-color: #e0861f #050505; }
+
+    /* 이미지 전체보기 모달 스타일 */
+    .full-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 5000; cursor: zoom-out; align-items: center; justify-content: center; }
+    .full-modal-content { max-width: 95%; max-height: 95%; object-fit: contain; animation: zoomIn 0.3s ease; }
+    .full-modal-close { position: absolute; top: 20px; right: 40px; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; }
+    @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+</style>
+
+<script>
+    const unitData = {
+        "1101": { 
+            resident: "안현성", 
+            feature: "비서울대 출신의 국제 콩쿨 수상 경력 하나 없는 변변찮은 음악인이었으나 결혼 이후 분수에 맞지 않는 자리를 덜컥 꿰차기 시작한다.", 
+            status: "입주 완료", 
+            images: ["/static/img/201_1101_plan.gif"] 
+        },
+        "1001": { 
+            resident: "김태환", 
+            feature: "자기만의 미학적인 기준 같은 것 없음. 언제나 가장 높은 값을 부른 업체에 돈을 주고, 간섭하지 않음. 지저분한 그림 같은 것만 걸 수 없게 함. 돈지랄이 잔뜩 묻어나는, 고풍스럽고 정갈한 인테리어. 그러나 과하게 벽이 휑해 감각이 있는 사람은 금세 이질감을 느낄 수 있을 것.", 
+            status: "입주 완료", 
+            images: ["/static/img/201_1001_plan.jpg"] 
+        },
+        "1002": { 
+            resident: "서미희", 
+            feature: "그녀가 보금자리로 돌아와 처음으로 한 것은, 클럽에 가입한 사모들을 만나는 일이었다. 사모들은 그 넓은 거실이 희뿌옇게 보일 때까지 전자담배를 피우고 있었다. 미희 남편이 떠났어. 큰언니가 가장 먼저 축하를 건넸고, 애프터눈 티 세트를 앞에 둔 여자들은 그들끼리만 알 수 있는 웃음을 공유한다. 그래서, 자기도 가입할 거지?", 
+            status: "입주 완료", 
+            images: ["/static/img/201_1002_plan.gif"] 
+        },
+        "901": { 
+            resident: "배지훈", 
+            feature: "하루의 대부분은 수술방과 병동에서 보낸다. 회진과 수술 보조, 응급 당직이 일상의 중심이다. 경영 서류보다 아직은 환자의 차트를 더 오래 들여다보는 편이다. 수술복을 입으면 배경은 크게 의미가 없다. 병원 밖에서는 비교적 조용한 생활을 유지 중.", 
+            status: "입주 완료", 
+            images: ["/static/img/201_901_plan.gif"] 
+        },
+        "702": { 
+            resident: "한주혁", 
+            feature: "모델 에이전시를 만들고 높은 계약금 불러 대형 모델들 불러놓고 부모 인맥, 지인 인맥 이용했더니 대형 에이전시로 성공하는건 순식간이더라. 그래도 난 아직 거슬려. 저 전광판에 나오는 모델은 우리 회사 애가 아니잖아?", 
+            status: "입주 완료", 
+            images: ["/static/img/201_702_plan.gif"] 
+        },
+        "701": { 
+            resident: "맹성제", 
+            feature: "어디서부터 무엇을 다루는지, 그의 앞에서는 말 한 마디와 행동 하나, 옷깃에 붙은 먼지를 터는 것조차 조심해야 한다는 평을 듣는다.", 
+            status: "입주 완료", 
+            images: ["/static/img/201_701_plan.gif"] 
+        },
+        "401": { 
+            resident: "재이", 
+            feature: "드럼은 상처의 흔적이자, 반항의 증거다. 드럼 스틱으로 맞았던 소년은 그 도구로 세상을 두드리는 성인이 되었다. 그러나, 오랜 세월 지속된 학대의 흉터는 크게 자리 잡아 여전히 스틱을 쥔 손을 떨리게 만든다.", 
+            status: "입주 완료", 
+            images: ["/static/img/201_401_plan.gif"] 
+        },
+        "101": { 
+            resident: "유마리", 
+            feature: "서울에 있는 대형 교회, ‘맑은복음교리회’의 담임 목사 이영섭의 막내딸. 위로 오빠 셋과 언니 둘. 차례로 이하경, 이하민, 이하은, 이하준, 이하정, 그리고 유마리. 하 자 돌림인 이유도 개신교 집안답게, 하나님을 존경, 하나님의 백성, 하나님의 은혜, 하나님이 준비하신, 하나님의 정. 다 줄임말이다. 그런데 왜 나만 마리아의 마리냐고? 글쎄요, 아마 내가 사생아라서 그렇겠죠. 우리 엄마는 첩이고. 그러니까 성도 다르지 않겠어요?", 
+            status: "입주 완료", 
+            images: ["/static/img/201_101_plan.gif"] 
+        }
+    };
+
+    // 표 생성 로직 (기존과 동일)
+    const tableBody = document.getElementById('unitTableBody');
+    let tableHtml = '';
+    const p1101 = "1101";
+    const isActive1101 = unitData[p1101] ? "active" : "";
+    tableHtml += `<tr><td colspan="2" class="unit-cell penthouse ${isActive1101}" onclick="openModal('${p1101}')">1101</td></tr>`;
+    for (let f = 10; f >= 1; f--) {
+        const u1 = (f * 100 + 1).toString();
+        const u2 = (f * 100 + 2).toString();
+        const active1 = unitData[u1] ? "active" : "";
+        const active2 = unitData[u2] ? "active" : "";
+        tableHtml += `<tr><td class="unit-cell ${active1}" onclick="openModal('${u1}')">${u1}</td><td class="unit-cell ${active2}" onclick="openModal('${u2}')">${u2}</td></tr>`;
+    }
+    tableBody.innerHTML = tableHtml;
+
+    function openModal(unitNo) {
+        const data = unitData[unitNo];
+        if (!data) return;
+
+        document.getElementById('modalTitle').innerText = "UNIT ARCHIVE: " + unitNo;
+        document.getElementById('specNo').innerText = "■ 호수: " + unitNo + "호";
+        document.getElementById('specResident').innerText = "■ 입주민: " + data.resident;
+        document.getElementById('specFeature').innerHTML = "■ 특징: " + data.feature;
+        document.getElementById('specStatus').innerText = "■ 상태: " + data.status;
+
+        const gallery = document.getElementById('modalGallery');
+        gallery.innerHTML = ''; 
+
+        if (data.images && data.images.length > 0) {
+            data.images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                gallery.appendChild(img);
+            });
+        }
+        document.getElementById('unitModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('unitModal').style.display = 'none'; }
+    window.onclick = function(e) { if (e.target == document.getElementById('unitModal')) closeModal(); }
+</script>
+<div id="imageFullModal" class="full-modal-overlay" onclick="closeFullImage()">
+    <span class="full-modal-close">&times;</span>
+    <img id="fullImage" class="full-modal-content">
+</div>
+{% endblock %}
